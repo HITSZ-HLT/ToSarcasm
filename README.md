@@ -17,7 +17,7 @@ where `0-非讽刺(non-sarcasm)`, `1-讽刺(sarcasm)`.
 
 :star: We have proofread and relabeled the data, and the statistical information of re-labeled dataset is as follows:
 
-| ToSarcasm-v2.0 | Train  |  Dev  |  Test  |
+| ToSarcasm | Train  |  Dev  |  Test  |
 | :---: | :--: | :--: | :---: |
 |  Sarcasm  | 1608 | 678 | 623 |
 |  Non-Sarcasm  | 1317 | 295 | 350 |
