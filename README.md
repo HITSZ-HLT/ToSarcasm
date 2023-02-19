@@ -15,7 +15,7 @@ This is a chinese dataset for topic-oriented sarcasm detection. The form of each
 ```
 where `0-非讽刺(non-sarcasm)`, `1-讽刺(sarcasm)`. 
 
-:star: We have corrected the data annotation, and the statistical information of re-labeled dataset is as follows:
+:star: We have relabeled the data, and the statistical information of re-labeled dataset is as follows:
 
 | ToSarcasm | Train  |  Dev  |  Test  |
 | :---: | :--: | :--: | :---: |
