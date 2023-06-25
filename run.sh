@@ -8,4 +8,4 @@ python run_prompt.py \
 --weight_decay 2e-3 \
 --data_path ./data/ \
 --seeds 42 \
---gpu_id 2
+--gpu_id -1

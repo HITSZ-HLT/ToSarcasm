@@ -38,7 +38,7 @@ def get_dataloader(raw_data, tokenizer, promptTemplate, WrapperClass, batch_size
                 guid=i,
                 text_a=example['topic'],
                 text_b=example['text'],
-                label=int(example['origin_iron'])
+                label=int(example['label'])
             )
         )
 
@@ -111,6 +111,15 @@ def run(args, seed=42):
     )
     promptModel = promptModel.to(device)
 
+    metric_record = {'accuracy': 0.0,
+        'precision': 0.0,
+        'recall': 0.0,
+        'f1': 0.0,
+        'macro precision': 0.0,
+        'macro recall': 0.0,
+        'macro f1': 0.0
+        }
+
     if args.do_train:
         train_dataloader = get_dataloader(train_data, tokenizer, promptTemplate, WrapperClass, sample=args.num_sample,
                                           batch_size=args.batch_size, max_len=args.max_length, split='train')
@@ -177,6 +186,14 @@ def run(args, seed=42):
             macro_r = recall_score(y_true, y_pred, average='macro')
             macro_f1 = f1_score(y_true, y_pred, average='macro')
 
+            metric_record["accuracy"] = acc
+            metric_record["precision"] = p
+            metric_record["recall"] = r
+            metric_record["f1"] = f1
+            metric_record["macro precision"] = macro_p
+            metric_record["macro recall"] = macro_r
+            metric_record["macro f1"] = macro_f1
+
             print('-- EPOCH %s: train_loss = %.4f, time: %s s\n'
                   '-- EPOCH %s: valid results: acc=%.4f, p=%.4f, r=%.4f, f1=%.4f\n'
                   '--                   macro: acc=%.4f, p=%.4f, r=%.4f, f1=%.4f' % (
@@ -218,6 +235,14 @@ def run(args, seed=42):
         macro_r = recall_score(y_true, y_pred, average='macro')
         macro_f1 = f1_score(y_true, y_pred, average='macro')
 
+        metric_record["accuracy"] = acc
+        metric_record["precision"] = p
+        metric_record["recall"] = r
+        metric_record["f1"] = f1
+        metric_record["macro precision"] = macro_p
+        metric_record["macro recall"] = macro_r
+        metric_record["macro f1"] = macro_f1
+
         print('-- test results: acc=%.4f, p=%.4f, r=%.4f, f1=%.4f\n'
               '--        macro: acc=%.4f, p=%.4f, r=%.4f, f1=%.4f' % (acc, p, r, f1, acc, macro_p, macro_r, macro_f1))
         print(results)
@@ -226,14 +251,7 @@ def run(args, seed=42):
         pd.DataFrame({'id': guids, 'pred': y_pred, 'true': y_true}).to_csv(
             os.path.join(args.save_path, 'test_results_%s.csv' % seed), index=False)
 
-        return {'accuracy': acc,
-                'precision': p,
-                'recall': r,
-                'f1': f1,
-                'macro precision': macro_p,
-                'macro recall': macro_r,
-                'macro f1': macro_f1
-                }
+    return metric_record
 
 
 if __name__ == '__main__':
